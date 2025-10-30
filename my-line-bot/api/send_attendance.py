@@ -84,7 +84,15 @@ def send_line(emp_data):
 
 # ---------------- Handler สำหรับ Vercel ----------------
 def handler(request):
-    emp_data = fetch_attendance()
-    if emp_data:
-        send_line(emp_data)
+    if request.method != "POST":
+        return {"status": "ok"}  # Vercel จะส่ง 200
+
+    try:
+        emp_data = fetch_attendance()
+        if emp_data:
+            send_line(emp_data)
+    except Exception as e:
+        print("Error in handler:", e)
     return {"status": "ok"}
+
+
